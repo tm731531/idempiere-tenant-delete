@@ -175,6 +175,65 @@ public class DeleteClientProcess extends SvrProcess {
             }
         }
 
+        // 強制刪除核心表（確保這些表一定會被處理）
+        addLog("");
+        addLog("--- 刪除核心資料 ---");
+        String[] coreTables = {
+            // 用戶相關（按依賴順序）
+            "AD_User_Roles",
+            "AD_User_OrgAccess",
+            "AD_UserBPAccess",
+            "AD_UserPreference",
+            "AD_User_Substitute",
+            "AD_User",
+            // 組織相關
+            "AD_Role_OrgAccess",
+            "AD_OrgInfo",
+            "AD_Org",
+            // 角色相關
+            "AD_Window_Access",
+            "AD_Process_Access",
+            "AD_Form_Access",
+            "AD_Workflow_Access",
+            "AD_Task_Access",
+            "AD_Document_Action_Access",
+            "AD_InfoWindow_Access",
+            "AD_Role_Included",
+            "AD_Role",
+            // 樹節點
+            "AD_TreeNodeBP",
+            "AD_TreeNodePR",
+            "AD_TreeNodeMM",
+            "AD_TreeNodeCMC",
+            "AD_TreeNodeCMS",
+            "AD_TreeNode",
+            "AD_Tree",
+            // 會計架構
+            "C_AcctSchema_GL",
+            "C_AcctSchema_Default",
+            "C_AcctSchema_Element",
+            "C_AcctSchema"
+        };
+
+        for (String table : coreTables) {
+            try {
+                // 先刪除翻譯表
+                deleteTrlTable(table + "_Trl", table, clientId);
+                // 刪除主表
+                String sql = "DELETE FROM " + table + " WHERE AD_Client_ID = ?";
+                int deleted = DB.executeUpdateEx(sql, new Object[]{clientId}, get_TrxName());
+                if (deleted > 0) {
+                    addLog("  " + table + ": 刪除 " + deleted + " 筆");
+                    totalDeleted += deleted;
+                    tableCount++;
+                }
+            } catch (Exception e) {
+                // 可能已被刪除或不存在，繼續
+                log.fine("Core table " + table + ": " + e.getMessage());
+            }
+        }
+        commitEx();
+
         // 最後刪除 Client 記錄本身
         addLog("");
         addLog("--- 刪除 Client 記錄 ---");
