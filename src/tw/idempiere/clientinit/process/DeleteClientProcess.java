@@ -226,10 +226,16 @@ public class DeleteClientProcess extends SvrProcess {
                     addLog("  " + table + ": 刪除 " + deleted + " 筆");
                     totalDeleted += deleted;
                     tableCount++;
+                } else {
+                    // 調試：顯示沒有資料的核心表
+                    if ("AD_User".equals(table) || "AD_Org".equals(table)) {
+                        addLog("  " + table + ": 0 筆（該 Client 無資料）");
+                    }
                 }
             } catch (Exception e) {
-                // 可能已被刪除或不存在，繼續
-                log.fine("Core table " + table + ": " + e.getMessage());
+                // 顯示刪除失敗的原因
+                addLog("  ⚠️ " + table + ": 刪除失敗 - " + e.getMessage());
+                log.log(Level.WARNING, "Core table " + table + " deletion failed", e);
             }
         }
         commitEx();
