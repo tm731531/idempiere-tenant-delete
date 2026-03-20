@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idempiere Name="ClientInitProcess" Version="1.0.0" idempiereVersion="12.0.0" DataBaseVersion="" Description="Client Initialize Process - 初始化 Tenant 交易資料 (System 層級操作)" Author="iDempiere Community" AuthorEmail="info@idempiere.org" CreatedDate="2026-03-20 15:30:00" UpdatedDate="2026-03-21 00:30:00" PackOutVersion="100" UpdateDictionary="true" Client="0-SYSTEM-System">
+
+<!-- ============================================ -->
+<!-- Reference: All Clients (Non-System)          -->
+<!-- 顯示所有 Client，排除 System Client          -->
+<!-- ============================================ -->
+<AD_Reference type="table">
+    <AD_Client_ID>0</AD_Client_ID>
+    <AD_Org_ID>0</AD_Org_ID>
+    <IsActive>Y</IsActive>
+    <Name>All Clients (Non-System)</Name>
+    <Description>顯示所有 Tenant，排除 System Client</Description>
+    <ValidationType>T</ValidationType>
+    <EntityType>U</EntityType>
+    <AD_Reference_UU>d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a</AD_Reference_UU>
+    <IsOrderByValue>N</IsOrderByValue>
+</AD_Reference>
+
+<!-- Reference Table Definition -->
+<AD_Ref_Table type="table">
+    <AD_Client_ID>0</AD_Client_ID>
+    <AD_Org_ID>0</AD_Org_ID>
+    <IsActive>Y</IsActive>
+    <AD_Reference_ID reference="uuid" reference-key="AD_Reference">d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a</AD_Reference_ID>
+    <AD_Table_ID reference="id">112</AD_Table_ID>
+    <AD_Key reference="id">207</AD_Key>
+    <AD_Display reference="id">208</AD_Display>
+    <IsValueDisplayed>N</IsValueDisplayed>
+    <WhereClause>AD_Client.AD_Client_ID > 0</WhereClause>
+    <OrderByClause>AD_Client.Name</OrderByClause>
+    <EntityType>U</EntityType>
+    <AD_Ref_Table_UU>e5f6a7b8-9c0d-1e2f-3a4b-5c6d7e8f9a0b</AD_Ref_Table_UU>
+    <AD_Window_ID reference="id"/>
+    <IsAlert>N</IsAlert>
+</AD_Ref_Table>
+
+<!-- ============================================ -->
+<!-- Process: Initialize Client                   -->
+<!-- System Admin 選擇任意 Tenant 進行初始化      -->
+<!-- ============================================ -->
+<AD_Process type="table">
+    <AD_Client_ID>0</AD_Client_ID>
+    <AD_Org_ID>0</AD_Org_ID>
+    <IsActive>Y</IsActive>
+    <Name>Initialize Client</Name>
+    <Description>初始化指定 Tenant 的交易資料，保留主資料</Description>
+    <Help>此 Process 由 System Admin 執行，可選擇任意 Tenant 進行初始化。
+
+功能：
+- 刪除指定 Tenant 的所有交易資料（訂單、發票、付款、庫存異動等）
+- 保留主資料（客戶、產品、會計科目等）
+- 可選擇重置文件序號和統計值
+
+注意事項：
+1. 必須以 System Client (Client=System) 身份執行
+2. 執行前請務必備份資料庫
+3. 建議先使用預覽模式確認影響範圍</Help>
+    <ProcedureName/>
+    <IsReport>N</IsReport>
+    <Value>Initialize_Client</Value>
+    <IsDirectPrint>N</IsDirectPrint>
+    <AD_ReportView_ID reference="id"/>
+    <Classname>tw.idempiere.clientinit.process.InitializeClientProcess</Classname>
+    <AccessLevel>4</AccessLevel>
+    <EntityType>U</EntityType>
+    <Statistic_Count>0</Statistic_Count>
+    <Statistic_Seconds>0</Statistic_Seconds>
+    <AD_PrintFormat_ID reference="id"/>
+    <WorkflowValue/>
+    <AD_Workflow_ID reference="id"/>
+    <IsBetaFunctionality>N</IsBetaFunctionality>
+    <ShowHelp>Y</ShowHelp>
+    <JasperReport/>
+    <AD_Form_ID reference="id"/>
+    <CopyFromProcess>N</CopyFromProcess>
+    <AD_Process_UU>f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_UU>
+    <AD_CtxHelp_ID reference="id"/>
+    <ExecutionType/>
+    <AllowMultipleExecution>P</AllowMultipleExecution>
+    <FileNamePattern/>
+
+    <!-- Parameter: Target_AD_Client_ID (目標 Tenant) -->
+    <!-- AD_Reference_ID=19 是 Table 類型，會使用 AD_Reference_Value_ID 指定的自定義 Reference -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Target Client</Name>
+        <Description>選擇要初始化的 Tenant</Description>
+        <Help>選擇要進行初始化的目標 Tenant。System Client 不會顯示在清單中。</Help>
+        <SeqNo>10</SeqNo>
+        <AD_Reference_ID reference="id">19</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="uuid" reference-key="AD_Reference">d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a</AD_Reference_Value_ID>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>Y</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>Target_AD_Client_ID</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>N</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000010</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: DateFrom -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Date From</Name>
+        <Description>刪除此日期之後的交易</Description>
+        <Help/>
+        <SeqNo>20</SeqNo>
+        <AD_Reference_ID reference="id">15</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>DateFrom</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000001</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: DateTo -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Date To</Name>
+        <Description>刪除此日期之前的交易</Description>
+        <Help/>
+        <SeqNo>30</SeqNo>
+        <AD_Reference_ID reference="id">15</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>DateTo</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000002</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: IsResetSequence -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Reset Sequence</Name>
+        <Description>是否重置文件序號</Description>
+        <Help/>
+        <SeqNo>40</SeqNo>
+        <AD_Reference_ID reference="id">20</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue>Y</DefaultValue>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>IsResetSequence</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000003</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: IsResetStatistics -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Reset Statistics</Name>
+        <Description>是否重置統計值</Description>
+        <Help/>
+        <SeqNo>50</SeqNo>
+        <AD_Reference_ID reference="id">20</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue>Y</DefaultValue>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>IsResetStatistics</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000004</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: IsPreviewOnly -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">f8c7b6a5-4d3e-2f1a-0b9c-8d7e6f5a4b3c</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Preview Only</Name>
+        <Description>僅預覽不執行</Description>
+        <Help>勾選此選項只會顯示將被刪除的記錄數，不會實際執行刪除</Help>
+        <SeqNo>60</SeqNo>
+        <AD_Reference_ID reference="id">20</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue>N</DefaultValue>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>IsPreviewOnly</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>f8c7b6a5-0001-0001-0001-000000000005</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+</AD_Process>
+
+<!-- ============================================ -->
+<!-- Process: Initialize Client Preview           -->
+<!-- System Admin 預覽任意 Tenant 的初始化影響    -->
+<!-- ============================================ -->
+<AD_Process type="table">
+    <AD_Client_ID>0</AD_Client_ID>
+    <AD_Org_ID>0</AD_Org_ID>
+    <IsActive>Y</IsActive>
+    <Name>Initialize Client Preview</Name>
+    <Description>預覽指定 Tenant 初始化的影響範圍</Description>
+    <Help>此 Process 由 System Admin 執行，用於預覽初始化的影響範圍。
+
+顯示將被刪除的記錄數統計，不會實際執行任何刪除操作。
+建議在執行 Initialize Client 之前先使用此 Process 確認影響範圍。</Help>
+    <ProcedureName/>
+    <IsReport>N</IsReport>
+    <Value>Initialize_Client_Preview</Value>
+    <IsDirectPrint>N</IsDirectPrint>
+    <AD_ReportView_ID reference="id"/>
+    <Classname>tw.idempiere.clientinit.process.InitializeClientPreview</Classname>
+    <AccessLevel>4</AccessLevel>
+    <EntityType>U</EntityType>
+    <Statistic_Count>0</Statistic_Count>
+    <Statistic_Seconds>0</Statistic_Seconds>
+    <AD_PrintFormat_ID reference="id"/>
+    <WorkflowValue/>
+    <AD_Workflow_ID reference="id"/>
+    <IsBetaFunctionality>N</IsBetaFunctionality>
+    <ShowHelp>Y</ShowHelp>
+    <JasperReport/>
+    <AD_Form_ID reference="id"/>
+    <CopyFromProcess>N</CopyFromProcess>
+    <AD_Process_UU>e7d6c5b4-3a2f-1e0d-9c8b-7a6f5e4d3c2b</AD_Process_UU>
+    <AD_CtxHelp_ID reference="id"/>
+    <ExecutionType/>
+    <AllowMultipleExecution>P</AllowMultipleExecution>
+    <FileNamePattern/>
+
+    <!-- Parameter: Target_AD_Client_ID (目標 Tenant) -->
+    <!-- AD_Reference_ID=19 是 Table 類型，會使用 AD_Reference_Value_ID 指定的自定義 Reference -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">e7d6c5b4-3a2f-1e0d-9c8b-7a6f5e4d3c2b</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Target Client</Name>
+        <Description>選擇要預覽的 Tenant</Description>
+        <Help>選擇要進行預覽的目標 Tenant。System Client 不會顯示在清單中。</Help>
+        <SeqNo>10</SeqNo>
+        <AD_Reference_ID reference="id">19</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="uuid" reference-key="AD_Reference">d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a</AD_Reference_Value_ID>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>Y</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>Target_AD_Client_ID</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>N</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>e7d6c5b4-0002-0001-0001-000000000010</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: DateFrom -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">e7d6c5b4-3a2f-1e0d-9c8b-7a6f5e4d3c2b</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Date From</Name>
+        <Description>篩選日期起</Description>
+        <Help/>
+        <SeqNo>20</SeqNo>
+        <AD_Reference_ID reference="id">15</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>DateFrom</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>e7d6c5b4-0002-0001-0001-000000000001</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: DateTo -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">e7d6c5b4-3a2f-1e0d-9c8b-7a6f5e4d3c2b</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Date To</Name>
+        <Description>篩選日期迄</Description>
+        <Help/>
+        <SeqNo>30</SeqNo>
+        <AD_Reference_ID reference="id">15</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>DateTo</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>e7d6c5b4-0002-0001-0001-000000000002</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+</AD_Process>
+
+<!-- ============================================ -->
+<!-- Process: Delete Client                       -->
+<!-- System Admin 刪除整個 Tenant                 -->
+<!-- ============================================ -->
+<AD_Process type="table">
+    <AD_Client_ID>0</AD_Client_ID>
+    <AD_Org_ID>0</AD_Org_ID>
+    <IsActive>Y</IsActive>
+    <Name>Delete Client (Tenant)</Name>
+    <Description>完全刪除指定的 Tenant (Client) 及其所有資料</Description>
+    <Help>此 Process 由 System Admin 執行，可完全刪除一個 Tenant。
+
+警告：此操作不可逆！執行後將永久刪除：
+- 所有交易資料（訂單、發票、付款、庫存異動等）
+- 所有主資料（客戶、產品、會計科目等）
+- Client 本身
+
+注意事項：
+1. 必須以 System Client (Client=System) 身份執行
+2. 執行前請務必備份資料庫
+3. 必須勾選「確認刪除」才能執行
+4. 建議先使用預覽模式確認影響範圍</Help>
+    <ProcedureName/>
+    <IsReport>N</IsReport>
+    <Value>Delete_Client</Value>
+    <IsDirectPrint>N</IsDirectPrint>
+    <AD_ReportView_ID reference="id"/>
+    <Classname>tw.idempiere.clientinit.process.DeleteClientProcess</Classname>
+    <AccessLevel>4</AccessLevel>
+    <EntityType>U</EntityType>
+    <Statistic_Count>0</Statistic_Count>
+    <Statistic_Seconds>0</Statistic_Seconds>
+    <AD_PrintFormat_ID reference="id"/>
+    <WorkflowValue/>
+    <AD_Workflow_ID reference="id"/>
+    <IsBetaFunctionality>N</IsBetaFunctionality>
+    <ShowHelp>Y</ShowHelp>
+    <JasperReport/>
+    <AD_Form_ID reference="id"/>
+    <CopyFromProcess>N</CopyFromProcess>
+    <AD_Process_UU>a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d</AD_Process_UU>
+    <AD_CtxHelp_ID reference="id"/>
+    <ExecutionType/>
+    <AllowMultipleExecution>P</AllowMultipleExecution>
+    <FileNamePattern/>
+
+    <!-- Parameter: Target_AD_Client_ID (目標 Tenant) -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Target Client</Name>
+        <Description>選擇要刪除的 Tenant</Description>
+        <Help>選擇要完全刪除的目標 Tenant。System Client 不會顯示在清單中。</Help>
+        <SeqNo>10</SeqNo>
+        <AD_Reference_ID reference="id">19</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="uuid" reference-key="AD_Reference">d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a</AD_Reference_Value_ID>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>Y</IsMandatory>
+        <DefaultValue/>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>Target_AD_Client_ID</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>N</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>a1b2c3d4-0003-0001-0001-000000000010</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: IsPreviewOnly -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Preview Only</Name>
+        <Description>僅預覽，不實際刪除</Description>
+        <Help>勾選此選項只會顯示將被刪除的資料統計，不會實際執行刪除操作</Help>
+        <SeqNo>20</SeqNo>
+        <AD_Reference_ID reference="id">20</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue>Y</DefaultValue>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>IsPreviewOnly</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic/>
+        <AD_Process_Para_UU>a1b2c3d4-0003-0001-0001-000000000020</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+
+    <!-- Parameter: IsConfirmed -->
+    <AD_Process_Para type="table">
+        <AD_Client_ID>0</AD_Client_ID>
+        <AD_Org_ID>0</AD_Org_ID>
+        <AD_Process_ID reference="uuid" reference-key="AD_Process">a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d</AD_Process_ID>
+        <IsActive>Y</IsActive>
+        <Name>Confirm Delete</Name>
+        <Description>確認刪除（必須勾選才能執行）</Description>
+        <Help>這是一個安全確認。您必須勾選此選項並取消勾選「僅預覽」才能執行實際的刪除操作。</Help>
+        <SeqNo>30</SeqNo>
+        <AD_Reference_ID reference="id">20</AD_Reference_ID>
+        <AD_Reference_Value_ID reference="id"/>
+        <IsRange>N</IsRange>
+        <AD_Val_Rule_ID reference="id"/>
+        <FieldLength>0</FieldLength>
+        <IsMandatory>N</IsMandatory>
+        <DefaultValue>N</DefaultValue>
+        <VFormat/>
+        <ValueMin/>
+        <ValueMax/>
+        <ColumnName>IsConfirmed</ColumnName>
+        <DefaultValue2/>
+        <IsCentrallyMaintained>Y</IsCentrallyMaintained>
+        <EntityType>U</EntityType>
+        <AD_Element_ID reference="id"/>
+        <ReadOnlyLogic/>
+        <DisplayLogic>@IsPreviewOnly@='N'</DisplayLogic>
+        <AD_Process_Para_UU>a1b2c3d4-0003-0001-0001-000000000030</AD_Process_Para_UU>
+        <IsEncrypted>N</IsEncrypted>
+        <MandatoryLogic/>
+        <IsAutocomplete>N</IsAutocomplete>
+    </AD_Process_Para>
+</AD_Process>
+
+</idempiere>

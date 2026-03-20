@@ -1,0 +1,11 @@
+# Build output
+target/
+bin/
+
+# IDE
+.settings/
+*.class
+
+# OS
+.DS_Store
+Thumbs.db

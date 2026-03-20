@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<docinfo>
+    <name>Client Initialize Process Package</name>
+    <description>
+        iDempiere Client Initialize Plugin - 2Pack Package
+
+        此套件包含兩個 Process：
+
+        1. Initialize Client (Initialize_Client)
+           - 初始化 Client 交易資料，保留主資料
+           - 支援日期範圍篩選
+           - 可選擇重置序號和統計值
+           - 支援預覽模式
+
+        2. Initialize Client Preview (Initialize_Client_Preview)
+           - 預覽初始化的影響範圍
+           - 顯示將被刪除的記錄數統計
+
+        注意事項：
+        - 執行前請務必備份資料庫
+        - System Client (AD_Client_ID=0) 無法初始化
+        - 建議先使用 Preview 確認影響範圍
+    </description>
+    <version>1.0.0</version>
+    <author>iDempiere Community</author>
+    <created>2026-03-20</created>
+    <idempiere_version>12.0.0</idempiere_version>
+</docinfo>
